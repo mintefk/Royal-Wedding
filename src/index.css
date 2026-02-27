@@ -135,6 +135,7 @@ html {
   .names h1 {
     font-size: 18px;
   }
+  
 }
 
 html {
@@ -166,10 +167,20 @@ html {
 
 .names {
   font-family: "Great Vibes", cursive;
-  font-size: 30px;
+  font-size: 25px;
+  margin: 0;
+}
+.studioname {
+  font-family: "Great Vibes", cursive;
+  font-size: 20px;
   margin: 0;
 }
 
+.names span {
+  font-family: "Great Vibes", cursive;
+  font-size: 15px;
+  margin: 0;
+}
 .nav {
   display: flex;
   gap: 20px;

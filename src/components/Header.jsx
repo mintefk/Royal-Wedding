@@ -108,9 +108,9 @@ const Header = () => {
         </button>
       </nav>
 
-      <div className="countdown flex items-center gap-15">
+      <div className="countdown flex items-center justify-between w-full">
           <span>{timeLeft}</span>
-          <span className="names">{weddingData.studioname}</span>
+          <span className="studioname"> {weddingData.studioname}</span>
       </div>
     </header>
   );
