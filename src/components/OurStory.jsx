@@ -17,7 +17,7 @@ export default function OurStory() {
         transition={{ duration: 6, ease: "easeOut" }}
       >
         <img
-          src="/images/two.jpg"   // change to your image
+          src="/images/7.jpg"   // change to your image
           alt="Our Story Background"
           className="w-full h-full object-cover opacity-50"
         />

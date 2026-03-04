@@ -10,7 +10,7 @@ export default function Venue() {
 
   return (
     <section
-      id="venue"
+      id="Venue"
       className="relative py-32 px-6 overflow-hidden bg-blackLuxury text-white"
       aria-labelledby="venue-heading"
     >
@@ -22,7 +22,7 @@ export default function Venue() {
         transition={{ duration: 6, ease: "easeOut" }}
       >
         <img
-          src="/images/two.jpg"
+          src="/images/8.jpg"
           alt="Hilton Addis Ababa exterior"
           className="w-full h-full object-cover opacity-40
                      [mask-image:radial-gradient(circle,rgba(0,0,0,1)_70%,rgba(0,0,0,0)_100%)]"

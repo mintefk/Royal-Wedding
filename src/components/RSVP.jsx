@@ -1,186 +1,220 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 
 export default function RSVP() {
+  const [attendance, setAttendance] = useState("");
+  const [phone, setPhone] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+
+    if (!phone || !isValidPhoneNumber(phone)) {
+      alert("እባክዎ የትክክለኛ ዓለም አቀፍ ስልክ ቁጥር ያስገቡ።");
+      return;
+    }
+
+    if (!form.checkValidity() || !attendance) {
+      form.reportValidity();
+      return;
+    }
+
+    const formData = new FormData(form);
+    const payload = {
+      fullName: formData.get("fullName") ?? "",
+      phone,
+      attendance,
+      guests: formData.get("guests") ?? "",
+      message: formData.get("message") ?? "",
+    };
+
+    try {
+      setSubmitting(true);
+      const res = await fetch("http://localhost:4000/api/rsvp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        throw new Error("Request failed");
+      }
+
+      alert("እናመሰግናለን፣ መመዝገብዎ ተቀብሏል።");
+      form.reset();
+      setAttendance("");
+    } catch (err) {
+      console.error(err);
+      alert("ይቅርታ፣ መመዝገብዎን ማስተናገድ አልተቻለም። እባክዎ እንደገና ይሞክሩ።");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <section
       id="RSVP"
-      className="relative py-32 px-6 overflow-hidden flex justify-center"
+      className="relative py-24 px-6 overflow-hidden flex items-center justify-center bg-[#1E3A2B]"
       aria-labelledby="rsvp-heading"
     >
-      {/* Background Image Layer */}
+      {/* Background image layer (from Venue concept) */}
       <motion.div
         className="absolute inset-0"
-        initial={{ scale: 1.05 }}
+        initial={{ scale: 1.08 }}
         whileInView={{ scale: 1 }}
         transition={{ duration: 6, ease: "easeOut" }}
       >
         <img
-          src="/images/new.jpg" // replace with your image
-          alt="Elegant wedding reception decor"
-          className="w-full h-full object-cover opacity-50
+          src="/images/6.jpg"
+          alt="Elegant wedding ambiance"
+          className="w-full h-full object-cover opacity-40
                      [mask-image:radial-gradient(circle,rgba(0,0,0,1)_70%,rgba(0,0,0,0)_100%)]
                      [mask-repeat:no-repeat]
                      [mask-size:100%_100%]"
         />
       </motion.div>
 
-      {/* Overlays */}
-      <div className="absolute inset-0 bg-blackLuxury/60" />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blackLuxury/30 to-blackLuxury/70" />
+      {/* Color overlay + decorative frame */}
+      <div className="absolute inset-0 bg-[#1E3A2B]/10" />
+      <div className="absolute inset-6 md:inset-10 border border-[#C6A75E]/60 rounded-[2rem] pointer-events-none" />
 
-      {/* Content */}
-      <div className="relative z-10 w-full max-w-xl">
-        <motion.div
-          className="text-center mb-10"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-        >
-          <p className="tracking-[0.2em] text-xs uppercase text-gold/80 mb-3">
-            Kindly Respond
+      <motion.div
+        className="relative z-10 w-full max-w-xl bg-white/95 backdrop-blur-md rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.45)] border border-[#C6A75E]/70 px-6 py-10 md:px-10 md:py-12"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.4 }}
+        transition={{ duration: 0.9, ease: "easeOut" }}
+      >
+        <div className="text-center mb-8">
+          <p className="text-xs tracking-[0.28em] uppercase text-[#C6A75E]/80 mb-2">
+            የጋብቻ መመዝገብ
           </p>
-
           <h2
             id="rsvp-heading"
-            className="font-serifLuxury text-3xl md:text-4xl text-gold mb-3"
+            className="text-3xl md:text-4xl font-serif text-[#1E3A2B] mb-4"
           >
-            RSVP to Our Royal Celebration
+            እባክዎ መገኘትዎን ያረጋግጡ
           </h2>
-
-          <p className="text-sm md:text-base text-gold/70 max-w-md mx-auto">
-            We look forward to celebrating this special day with you.
-            Please confirm your attendance at your earliest convenience.
+          <p className="text-sm md:text-base text-[#1E3A2B]/80 leading-relaxed">
+            ወዳጆቻችን እና ቤተሰቦቻችን ሆይ፣ በክብር እና በደስታ የሚካሄደውን የጋብቻችን ቀን ከእኛ ጋር
+            እንድታካፍሉ እንጋብዛችኋለን። እባክዎ መገኘትዎን ወይም እንዳትችሉ በጊዜ ያሳውቁን።
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          className="backdrop-blur-xl bg-blackLuxury/40 border border-gold/70 px-8 py-10 rounded-2xl shadow-[0_0_40px_rgba(0,0,0,0.6)]"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.9, ease: "easeOut" }}
-        >
-          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-            {/* Name */}
-            <div className="space-y-2">
-              <label
-                htmlFor="name"
-                className="block text-xs tracking-[0.16em] uppercase text-gold/80"
-              >
-                Full Name
-              </label>
-              <input
-                id="name"
-                type="text"
-                required
-                placeholder="Enter your full name"
-                className="w-full bg-transparent border-b border-gold/60 py-3 text-gold placeholder-gold/45 outline-none focus:border-gold focus:ring-0 transition-colors"
+        <form className="space-y-5 text-sm md:text-base" onSubmit={handleSubmit} noValidate>
+          <div className="space-y-1">
+            <label htmlFor="fullName" className="block text-[#1E3A2B] font-medium">
+              ሙሉ ስም *
+            </label>
+            <input
+              id="fullName"
+              name="fullName"
+              type="text"
+              required
+              className="w-full rounded-xl border border-[#C6A75E]/50 bg-white/80 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#C6A75E] focus:border-transparent text-[#1E3A2B] placeholder:text-[#1E3A2B]/40"
+              placeholder="ሙሉ ስምዎን ያስገቡ"
+            />
+          </div>
+
+          <div className="space-y-1 border-[#C6A75E]/50">
+            <label htmlFor="phone" className="block text-[#1E3A2B] font-medium">
+              ስልክ ቁጥር *
+            </label>
+            <div className="w-full">
+              <PhoneInput
+                id="phone"
+                name="phone"
+                international
+                defaultCountry="ET"
+                value={phone}
+                onChange={setPhone}
+                className="w-full rounded-xl border border-[#C6A75E]/50 bg-white/80 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#C6A75E] focus:border-transparent text-[#1E3A2B] placeholder:text-[#1E3A2B]/40"
+                countryCallingCodeEditable={false}
               />
             </div>
+          </div>
 
-            {/* Email */}
-            <div className="space-y-2">
-              <label
-                htmlFor="email"
-                className="block text-xs tracking-[0.16em] uppercase text-gold/80"
-              >
-                Email Address
+          <div className="space-y-2">
+            <p className="text-[#1E3A2B] font-medium">መገኘት ማረጋገጫ *</p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <label className="flex-1 inline-flex items-center gap-2 rounded-xl border border-[#C6A75E]/60 bg-white/70 px-3 py-2 cursor-pointer hover:border-[#C6A75E] transition-colors">
+                <input
+                  type="radio"
+                  name="attendance"
+                  value="yes"
+                  className="text-[#1E3A2B]"
+                  onChange={(e) => setAttendance(e.target.value)}
+                  required
+                />
+                <span className="text-[#1E3A2B]">እገኛለሁ</span>
               </label>
-              <input
-                id="email"
-                type="email"
-                required
-                placeholder="you@example.com"
-                className="w-full bg-transparent border-b border-gold/60 py-3 text-gold placeholder-gold/45 outline-none focus:border-gold focus:ring-0 transition-colors"
-              />
-            </div>
-
-            {/* Attendance */}
-            <div className="space-y-2">
-              <label
-                htmlFor="attendance"
-                className="block text-xs tracking-[0.16em] uppercase text-gold/80"
-              >
-                Attendance
+              <label className="flex-1 inline-flex items-center gap-2 rounded-xl border border-[#C6A75E]/60 bg-white/70 px-3 py-2 cursor-pointer hover:border-[#C6A75E] transition-colors">
+                <input
+                  type="radio"
+                  name="attendance"
+                  value="no"
+                  className="text-[#1E3A2B]"
+                  onChange={(e) => setAttendance(e.target.value)}
+                  required
+                />
+                <span className="text-[#1E3A2B]">አልችልም</span>
               </label>
-              <select
-                id="attendance"
-                className="w-full bg-transparent border-b border-gold/60 py-3 text-gold outline-none focus:border-gold focus:ring-0 transition-colors"
-                defaultValue=""
-              >
-                <option value="" disabled className="bg-blackLuxury text-gold">
-                  Please select an option
-                </option>
-                <option className="bg-blackLuxury text-gold">
-                  Joyfully Accepts
-                </option>
-                <option className="bg-blackLuxury text-gold">
-                  Regretfully Declines
-                </option>
-              </select>
             </div>
+          </div>
 
-            {/* Guest Count */}
-            <div className="space-y-2">
-              <label
-                htmlFor="guests"
-                className="block text-xs tracking-[0.16em] uppercase text-gold/80"
-              >
-                Number of Guests
-              </label>
-              <select
-                id="guests"
-                className="w-full bg-transparent border-b border-gold/60 py-3 text-gold outline-none focus:border-gold focus:ring-0 transition-colors"
-                defaultValue="1"
-              >
-                <option className="bg-blackLuxury text-gold" value="1">
-                  1 Guest
-                </option>
-                <option className="bg-blackLuxury text-gold" value="2">
-                  2 Guests
-                </option>
-                <option className="bg-blackLuxury text-gold" value="3">
-                  3 Guests
-                </option>
-                <option className="bg-blackLuxury text-gold" value="4">
-                  4 Guests
-                </option>
-              </select>
-            </div>
+          <div className="space-y-1">
+            <label htmlFor="guests" className="block text-[#1E3A2B] font-medium">
+              የእንግዶች ብዛት *
+            </label>
+            <input
+              id="guests"
+              name="guests"
+              type="number"
+              min={1}
+              max={10}
+              required
+              className="w-full rounded-xl border border-[#C6A75E]/50 bg-white/80 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#C6A75E] focus:border-transparent text-[#1E3A2B] placeholder:text-[#1E3A2B]/40"
+              placeholder="የሚመጡ እንግዶች ብዛት"
+            />
+          </div>
 
-            {/* Message */}
-            <div className="space-y-2">
-              <label
-                htmlFor="message"
-                className="block text-xs tracking-[0.16em] uppercase text-gold/80"
-              >
-                Special Notes
-              </label>
-              <textarea
-                id="message"
-                rows={3}
-                placeholder="Share any dietary requirements or special requests."
-                className="w-full bg-transparent border-b border-gold/60 py-3 text-gold placeholder-gold/45 outline-none resize-none focus:border-gold focus:ring-0 transition-colors"
-              />
-            </div>
+          <div className="space-y-1">
+            <label htmlFor="message" className="block text-[#1E3A2B] font-medium">
+              መልዕክት (ፈቃደኛ)
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              rows={3}
+              className="w-full rounded-xl border border-[#C6A75E]/40 bg-white/80 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#C6A75E] focus:border-transparent text-[#1E3A2B] placeholder:text-[#1E3A2B]/40 resize-none"
+              placeholder="ለወጣቶቹ መልዕክትዎን እዚህ ይጻፉ (ፈቃደኛ)"
+            />
+          </div>
 
-            {/* Button */}
+          <div className="flex items-center gap-3 pt-3">
+            <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[#C6A75E] to-transparent" />
+            <span className="px-3 py-1 rounded-full border border-[#C6A75E]/70 bg-white/80 text-[11px] tracking-[0.18em] uppercase text-[#1E3A2B]/80">
+              ኢትዮጵያ
+            </span>
+            <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[#C6A75E] to-transparent" />
+          </div>
+
+          <div className="pt-2">
             <motion.button
-  type="submit"
-  whileHover={{ y: -1 }}
-  whileTap={{ y: 0 }}
-  className="w-full mt-4 py-3.5 border border-transparent bg-[#ac5e23] text-white font-medium tracking-[0.16em] uppercase text-xs flex items-center justify-center gap-2 rounded-md transition-colors duration-300 hover:bg-[#bf6a2a]"
-  style={{ backgroundColor: '#2997a4' }}>
-  Confirm Attendance
-  <span className="text-lg leading-none">→</span>
-</motion.button>
-
-            <p className="text-[11px] text-center text-gold/60 mt-3">
-              By confirming, you help us prepare a truly memorable experience
-              tailored for you.
-            </p>
-          </form>
-        </motion.div>
-      </div>
+              type="submit"
+              whileHover={{ scale: 1.03, y: -1 }}
+              whileTap={{ scale: 0.98, y: 0 }}
+              disabled={submitting}
+              className="w-full inline-flex justify-center items-center rounded-full bg-[#C6A75E] text-[#1E3A2B] font-semibold tracking-wide px-6 py-3.5 shadow-[0_10px_30px_rgba(198,167,94,0.6)] hover:shadow-[0_14px_40px_rgba(198,167,94,0.8)] transition-shadow duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {submitting ? "በመላክ ላይ..." : "መረጃውን ያስገቡ"}
+            </motion.button>
+          </div>
+        </form>
+      </motion.div>
     </section>
   );
 }

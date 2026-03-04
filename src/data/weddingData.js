@@ -1,8 +1,8 @@
 export const weddingData = {
-  bride: "Robi",
-  groom: "Mintu",
+  bride: "Abe",
+  groom: "Yenu",
   studioname: "Mintu Photography",
-  date: "September 21, 2026",
+  date: "January 21, 2026",
   ceremonyTime: "4:00 PM",
   venue: "The Grand Imperial Palace",
   venueAddress: "123 Royal Gardens, Florence, Italy",
