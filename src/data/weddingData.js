@@ -9,8 +9,8 @@ export const weddingData = {
   dressCode: "Black Tie Formal",
   
   story: [
-    { year: "2018", text: "A serendipitous meeting in Florence." },
+    { year: "2018", text: "A serendipitous meeting in Hawassa." },
     { year: "2020", text: "A love nurtured across continents." },
-    { year: "2024", text: "A proposal beneath golden skies." },
+    { year: "2025", text: "A proposal beneath golden skies of Addis Ababa.." },
   ],
 };

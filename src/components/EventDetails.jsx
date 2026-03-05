@@ -16,7 +16,7 @@ export default function EventDetails() {
         transition={{ duration: 6, ease: "easeOut" }}
       >
         <img
-          src="/images/10.jpg" // change to your image
+          src="/images/10.webp" loading="lazy"  // change to your image
           alt="Elegant wedding event ambiance"
           className="w-full h-full object-cover opacity-50
                      [mask-image:radial-gradient(circle,rgba(0,0,0,1)_70%,rgba(0,0,0,0)_100%)]

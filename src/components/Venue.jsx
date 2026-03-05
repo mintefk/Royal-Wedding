@@ -22,7 +22,7 @@ export default function Venue() {
         transition={{ duration: 6, ease: "easeOut" }}
       >
         <img
-          src="/images/8.jpg"
+          src="/images/8.webp" loading="lazy"
           alt="Hilton Addis Ababa exterior"
           className="w-full h-full object-cover opacity-40
                      [mask-image:radial-gradient(circle,rgba(0,0,0,1)_70%,rgba(0,0,0,0)_100%)]"

@@ -68,7 +68,7 @@ export default function RSVP() {
         transition={{ duration: 6, ease: "easeOut" }}
       >
         <img
-          src="/images/6.jpg"
+          src="/images/6.webp" loading="lazy" 
           alt="Elegant wedding ambiance"
           className="w-full h-full object-cover opacity-40
                      [mask-image:radial-gradient(circle,rgba(0,0,0,1)_70%,rgba(0,0,0,0)_100%)]

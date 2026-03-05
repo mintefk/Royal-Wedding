@@ -42,9 +42,23 @@ export default function Gallery() {
           className="text-center font-serifLuxury text-4xl md:text-5xl mb-20 text-gold"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
         >
           Gallery
+          <br />
+          <br />
+          <div className="text-center max-w-3xl mx-auto mb-14 gap-4">
+          <motion.p
+            className="uppercase tracking-[0.28em] text-xs md:text-sm text-black/85 mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 2 }}
+          >
+            “I have found the one whom my soul loves.”
+            - Song of Solomon 3:4
+          </motion.p>
+
+        </div>
         </motion.h2>
 
         <div className="columns-1 md:columns-3 gap-6 space-y-6">
